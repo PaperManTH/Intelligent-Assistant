@@ -1,5 +1,6 @@
 package com.IntelligentAssistant.domain.vo;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -7,23 +8,21 @@ import java.util.List;
 /**
  * @Author thpaperman
  * @Description AI历史记录VO
- * @Date 2025/4/21
+ * @Date 2026/1/19
  * @DAY_NAME_FULL: 星期一
  * @Version 1.0
  */
 
 @Data
+@Builder
 public class AIHistoryVO {
 
     /** 会话ID **/
     private String conversationId;
 
-    /** 会话内容总结 **/
-    private String firstQuestion;
+    /** 会话标题 **/
+    private String title;;
 
-    /** 会话时间 **/
-    private String createTime;
-
-    /** 会话答案 **/
-    private List<String> answer;
+    /** 会话更新时间 **/
+    private String updateTime;
 }

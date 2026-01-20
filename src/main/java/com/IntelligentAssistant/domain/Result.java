@@ -1,8 +1,8 @@
-package com.paperman.domain;
+package com.IntelligentAssistant.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.paperman.constant.HttpStatus;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.http.HttpStatus;
 
 import java.io.Serial;
 import java.util.HashMap;
@@ -38,22 +38,22 @@ public class Result extends HashMap<String, Object> {
 
     /**
      * 初始化Result对象, 带状态码和信息
-     * @param code 状态码
+     * @param status 状态码
      * @param msg 响应信息
      */
-    public Result(int code, String msg) {
-        put(STATUS_CODE, code);
+    public Result(HttpStatus status, String msg) {
+        put(STATUS_CODE, status.value());
         put(MESSAGE, msg);
     }
 
     /**
      * 初始化Result对象, 带状态码, 信息和数据
-     * @param code 状态码
+     * @param status 状态码
      * @param msg 响应信息
      * @param data 响应数据
      */
-    public Result(int code, String msg, Object data) {
-        put(STATUS_CODE, code);
+    public Result(HttpStatus status, String msg, Object data) {
+        put(STATUS_CODE, status.value());
         put(MESSAGE, msg);
         if(ObjectUtils.isNotEmpty(data)) {
             put(DATA, data);
@@ -83,7 +83,7 @@ public class Result extends HashMap<String, Object> {
      * @return Result
      */
     public static Result success(String msg) {
-        return new Result(HttpStatus.SUCCESS, msg);
+        return new Result(HttpStatus.OK, msg);
     }
 
     /**
@@ -93,7 +93,7 @@ public class Result extends HashMap<String, Object> {
      * @return Result
      */
     public static Result success(String msg, Object data) {
-        return new Result(HttpStatus.SUCCESS, msg, data);
+        return new Result(HttpStatus.OK, msg, data);
     }
 
     /**
@@ -119,7 +119,7 @@ public class Result extends HashMap<String, Object> {
      * @return Result
      */
     public static Result error(String msg) {
-        return new Result(HttpStatus.ERROR, msg);
+        return new Result(HttpStatus.BAD_REQUEST, msg);
     }
 
     /**
@@ -129,7 +129,7 @@ public class Result extends HashMap<String, Object> {
      * @return Result
      */
     public static Result error(String msg, Object data) {
-        return new Result(HttpStatus.ERROR, msg, data);
+        return new Result(HttpStatus.BAD_REQUEST, msg, data);
     }
 
 }

@@ -1,8 +1,11 @@
-package com.paperman.config;
+package com.IntelligentAssistant.config;
 
-import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
-import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
+import com.alibaba.cloud.ai.memory.redis.JedisRedisChatMemoryRepository;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.ChatMemoryRepository;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @Author thpaperman
  * @Description Spring AI Alibaba 配置类
- * @Date 2026/1/14
+ * @Date 2026/1/19
  * @DAY_NAME_FULL: 星期三
  * @Version 1.0
  */
@@ -22,23 +25,24 @@ public class SpringAiAlibabaConfig {
     @Value("${spring.ai.dashscope.api-key}")
     private String apiKey;
 
-    /**
-     * 配置 DashScopeApi
-     *
-     * @return {@link DashScopeApi}
-     */
+    @Value("${spring.ai.dashscope.memory-length}")
+    private Integer memoryLen;
+
     @Bean
-    public DashScopeApi dashScopeApi() {
-        return DashScopeApi.builder().apiKey(apiKey).build();
+    public ChatMemory chatMemory(JedisRedisChatMemoryRepository chatMemoryRepository) {
+        return MessageWindowChatMemory.builder()
+                .chatMemoryRepository(chatMemoryRepository)
+                .maxMessages(memoryLen)
+                .build();
     }
 
     @Bean
-    public ChatModel chatModel(DashScopeApi scopeApi) {
-        return DashScopeChatModel.builder().dashScopeApi(scopeApi).build();
+    public ChatClient chatClient(ChatModel chatModel,
+                                 ChatMemory chatMemory) {
+        return ChatClient.builder(chatModel)
+                // 配置 MessageChatMemoryAdvisor 让 ChatClient 自动注入历史对话
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .build();
     }
 
-    @Bean
-    public ChatClient chatClient(ChatModel chatModel) {
-        return ChatClient.builder(chatModel).build();
-    }
 }

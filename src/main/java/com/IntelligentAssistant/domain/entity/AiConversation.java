@@ -1,15 +1,15 @@
-package com.IntelligentAssistant.domain.pojo;
+package com.IntelligentAssistant.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Author thpaperman
@@ -20,7 +20,16 @@ import java.util.List;
  */
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AiConversation implements Serializable {
+    /**
+     * 序列化版本号
+     */
+    @Serial
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
     /**
      * 会话 Id
      */
@@ -29,15 +38,11 @@ public class AiConversation implements Serializable {
     /**
      * 会话关联用户Id
      */
-    private Integer userId;
+    private String userId;
     /**
      * 会话标题
      */
     private String title;
-    /**
-     * 会话消息,初始化为空
-     */
-    private List<AIChatMessage> messages = new ArrayList<>();
     /**
      * 会话创建时间
      */
@@ -46,31 +51,4 @@ public class AiConversation implements Serializable {
      * 会话更新时间
      */
     private Instant updateTime;
-    /**
-     * 序列化版本号
-     */
-    @Serial
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 添加一条消息
-     */
-    public void addMessage(AIChatMessage message) {
-        if (messages == null) {
-            messages = new ArrayList<>();
-        }
-        messages.add(message);
-        updateTime = Instant.now();
-    }
-
-    /**
-     * 获取消息列表
-     */
-    public List<AIChatMessage> getMessages() {
-        if (CollectionUtils.isEmpty(messages)) {
-            return List.of();
-        }
-        return messages;
-    }
 }

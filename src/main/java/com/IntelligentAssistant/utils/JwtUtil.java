@@ -1,9 +1,11 @@
-package com.paperman.utils;
+package com.IntelligentAssistant.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
+import org.apache.tomcat.util.http.parser.Authorization;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -13,15 +15,17 @@ import java.util.UUID;
 
 /**
  * @Author thpaperman
- * @Description JWT 工具类
- * @Date 2026/1/3
- * @DAY_NAME_FULL: 星期六
+ * @Description jwt 工具类
+ * @Date 2026/1/19
+ * @DAY_NAME_FULL: 星期一
  * @Version 1.0
  */
 public class JwtUtil {
 
-    public static final Long JWT_TTL = 60 * 60 * 1000L;
-    public static final String JWT_KEY = "sangeng";
+    private static final Long JWT_TTL = 60 * 60 * 1000L;
+    private static final String JWT_KEY = "c3VwZXItc2VjcmV0LWtleS1mb3Itand0LXNpZ25pbmcta2V5LWZvci1oczI1Ng";
+//    private static final String JWT_KEY = System.getenv("JWT_KEY")
+    private static final String BEARER_PREFIX = "Ia ";
 
     /**
      * 生成 uuid
@@ -35,84 +39,45 @@ public class JwtUtil {
     /**
      * 生成 jwt
      *
-     * @param subject token中要存放的数据（json格式）
+     * @param subject token 中要存放的数据
      * @return {@link String}
-     * @author thpaperman
-     * @date 2026/01/05 18:20
      */
     public static String createJwt(String subject) {
-        // 设置过期时间
-        JwtBuilder builder = getJwtBuilder(subject, null, getUUID());
+        JwtBuilder builder = getJwtBuilder(subject, getUUID());
         return builder.compact();
     }
 
     /**
      * 生成 jwt
      *
-     * @param subject   token 中要存放的数据（json格式）
-     * @param ttlMillis token 超时时间
-     * @return {@link String}
-     */
-    public static String createJwt(String subject, Long ttlMillis) {
-        // 设置过期时间
-        JwtBuilder builder = getJwtBuilder(subject, ttlMillis, getUUID());
-        return builder.compact();
-    }
-
-    /**
-     * 生成 jwt
-     *
-     * @param subject   token 中要存放的数据（json格式）
-     * @param ttlMillis token 超时时间
-     * @param uuid      唯一标识
+     * @param subject token 中要存放的数据
+     * @param uuid    唯一标识
      * @return {@link JwtBuilder}
-     * @author thpaperman
-     * @date 2026/01/05 19:27
      */
-    private static JwtBuilder getJwtBuilder(String subject, Long ttlMillis,
-                                            String uuid) {
+    private static JwtBuilder getJwtBuilder(String subject, String uuid) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         SecretKey secretKey = generalKey();
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
-        if (ttlMillis == null) {
-            ttlMillis = JwtUtil.JWT_TTL;
-        }
-        long expMillis = nowMillis + ttlMillis;
+        long expMillis = nowMillis + JWT_TTL;
         Date expDate = new Date(expMillis);
         return Jwts.builder()
                 .setId(uuid)
                 .setSubject(subject)
-                .setIssuer("sg")
+                .setIssuer("th")
                 .setIssuedAt(now)
                 .signWith(secretKey, signatureAlgorithm)
                 .setExpiration(expDate);
     }
 
     /**
-     * 创建 token
-     *
-     * @param id 唯一标识
-     * @param subject 主题
-     * @param ttlMillis 过期时间
-     * @return {@link String}
-     */
-    public static String createJwt(String id, String subject, Long ttlMillis) {
-        // 设置过期时间
-        JwtBuilder builder = getJwtBuilder(subject, ttlMillis, id);
-        return builder.compact();
-    }
-
-    /**
      * 生成加密后的秘钥 secretKey
      *
      * @return {@link SecretKey}
-     * @author thpaperman
-     * @date 2026/01/05 19:16
      */
     public static SecretKey generalKey() {
-        byte[] encodedKey = Base64.getDecoder().decode(JwtUtil.JWT_KEY);
-        return new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
+        byte[] encodedKey = Base64.getDecoder().decode(JWT_KEY);
+        return new SecretKeySpec(encodedKey, 0, encodedKey.length, "HmacSHA256");
     }
 
     /**
@@ -120,8 +85,6 @@ public class JwtUtil {
      *
      * @param jwt jwt
      * @return {@link Claims}
-     * @author thpaperman
-     * @date 2026/01/05 19:16
      */
     public static Claims parseJwt(String jwt) {
         SecretKey secretKey = generalKey();
@@ -130,5 +93,50 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(jwt)
                 .getBody();
+    }
+
+    /**
+     * 从请求头中获取 token
+     *
+     * @param request 请求
+     * @return {@link String}
+     */
+    public static String getTokenFromHeader(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith(BEARER_PREFIX)) {
+            return token.substring(BEARER_PREFIX.length());
+        }
+        return null;
+    }
+
+    /**
+     * 校验 token 是否有效
+     *
+     * @param token 待校验的 token
+     * @return boolean true表示有效，false表示无效
+     */
+    public static boolean validateToken(String token) {
+        try {
+            Claims claims = parseJwt(token);
+            // 检查是否已过期
+            Date expiration = claims.getExpiration();
+            return expiration.after(new Date());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * 从 token 中获取用户信息
+     *
+     * @param token token
+     * @return Claims 包含用户信息的Claims对象
+     */
+    public static Claims getClaimsFromToken(String token) {
+        try {
+            return parseJwt(token);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

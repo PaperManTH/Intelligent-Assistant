@@ -1,7 +1,7 @@
-package com.paperman.security.domain;
+package com.IntelligentAssistant.security.domain;
 
+import com.IntelligentAssistant.domain.entity.IaUser;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.paperman.domain.pojo.BboxUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.util.Collection;
-import java.util.Set;
 
 /**
  * @Author thpaperman
@@ -31,9 +30,6 @@ public class LoginUser implements UserDetails {
     /** 用户 ID **/
     private Long userId;
 
-    /** 团队 ID **/
-    private Long teamId;
-
     /** 用户 token **/
     private String token;
 
@@ -43,36 +39,18 @@ public class LoginUser implements UserDetails {
     /** 过期时间 **/
     private Long expireTime;
 
-    /** 登录 IP **/
-    private String ipaddr;
-
-    /** 登录地点 **/
-    private String loginLocation;
-
-    /** 浏览器 **/
-    private String browser;
-
-    /** 操作系统 **/
-    private String os;
-
-    /** 权限 **/
-    private Set<String> permissions;
-
     /** 用户 **/
-    private BboxUser user;
+    private IaUser user;
 
-    public LoginUser(BboxUser user, Set<String> permissions)
+    public LoginUser(IaUser user)
     {
         this.user = user;
-        this.permissions = permissions;
     }
 
-    public LoginUser(Long userId, Long teamId, BboxUser user, Set<String> permissions)
+    public LoginUser(Long userId, IaUser user)
     {
         this.userId = userId;
-        this.teamId = teamId;
         this.user = user;
-        this.permissions = permissions;
     }
 
     @JSONField(serialize = false)

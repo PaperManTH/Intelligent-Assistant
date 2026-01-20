@@ -1,6 +1,5 @@
-package com.chome.domain.entity;
+package com.IntelligentAssistant.domain.entity;
 
-import cn.hutool.core.lang.UUID;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +10,7 @@ import org.springframework.data.annotation.Id;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.UUID;
 
 /**
  * @Author thpaperman
@@ -27,11 +27,6 @@ import java.time.Instant;
 public class AIChatMessage implements Serializable {
 
     /**
-     * 聊天记录ID
-     */
-    @Id
-    private String id = UUID.randomUUID().toString();
-    /**
      * 聊天内容
      */
     private String content;
@@ -40,18 +35,13 @@ public class AIChatMessage implements Serializable {
      */
     private String role;
     /**
-     * 模式
-     */
-    private String chatModel;
-    /**
      * 时间戳
      */
-    private Instant timestamp;
+    private Long timestamp;
     /**
      * 序列化版本号
      */
     @Serial
-    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
 }

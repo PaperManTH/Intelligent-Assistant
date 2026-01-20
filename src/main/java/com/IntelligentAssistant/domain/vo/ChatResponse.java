@@ -1,4 +1,4 @@
-package com.chome.domain.vo;
+package com.IntelligentAssistant.domain.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,8 @@ import java.util.Map;
 
 /**
  * @Author thpaperman
- * @Description 系统基础类
- * @Date 2025/5/13
+ * @Description 聊天响应
+ * @Date 2026/1/19
  * @DAY_NAME_FULL: 星期二
  * @Version 1.0
  */
@@ -21,26 +21,20 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AIChatResponse {
+public class ChatResponse {
 
-    /**
-     * 内容块
-     */
+    /** 回复文本 **/
     private String text;
-    /**
-     * 文生图的结果
-     */
-    private Image image;
-    /**
-     * 状态码
-     */
-    private int status;
-    /**
-     * 元数据（如会话 ID）
-     */
+
+    /** 状态码 **/
+    private String status;
+
+    /** 所属会话Id **/
+    private String conversationId;
+
+    /** 元数据 **/
     private Map<String, Object> metadata;
-    /**
-     * 时间戳
-     */
-    private LocalDateTime timestamp;
+
+    /** 时间戳 **/
+    private Long timestamp;
 }

@@ -1,1 +1,23 @@
-spring.application.name=Intelligent_Assistant
+server:
+  port: 8080
+
+spring:
+  application:
+    name: Intelligent-Assistant
+  datasource:
+    url: jdbc:mysql://localhost:3306/Intelligent_Assistant?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: 123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      lettuce:
+        pool:
+          enabled: true
+  ai:
+    dashscope:
+      api-key: sk-a514564db277446fa9c551918a0c46aa
+      memory-length: 10
+
