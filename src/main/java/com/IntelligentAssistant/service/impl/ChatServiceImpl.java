@@ -6,6 +6,7 @@ import com.IntelligentAssistant.domain.entity.AIChatMessage;
 import com.IntelligentAssistant.domain.entity.AiConversation;
 import com.IntelligentAssistant.domain.vo.AIHistoryVO;
 import com.IntelligentAssistant.domain.vo.ChatResponse;
+import com.IntelligentAssistant.exception.chat.ChatStreamException;
 import com.IntelligentAssistant.repository.RedisConversationStore;
 import com.IntelligentAssistant.service.IChatService;
 import org.springframework.ai.chat.client.ChatClient;
@@ -81,7 +82,7 @@ public class ChatServiceImpl implements IChatService {
                     saveMemory(answerBuffer.toString(), finalConversationId, "ASSISTANT", userId);
                 })
                 .doOnError(e -> {
-                    throw new RuntimeException("聊天异常,已终止", e);
+                    throw new ChatStreamException();
                 });
     }
 

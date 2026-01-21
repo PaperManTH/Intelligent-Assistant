@@ -16,6 +16,5 @@ public class UserNotExistsException extends UserException {
 
     public UserNotExistsException() {
         super("用户不存在", null);
-        logError();
     }
 }

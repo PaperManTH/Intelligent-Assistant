@@ -15,6 +15,5 @@ public class UserInfoFormatException extends UserException {
     private static final long serialVersionUID = 1L;
     public UserInfoFormatException() {
         super("用户名密码格式错误", null);
-        logError();
     }
 }

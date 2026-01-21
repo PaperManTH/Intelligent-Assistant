@@ -16,6 +16,5 @@ public class UserAlreadyExistsException extends UserException {
 
     public UserAlreadyExistsException() {
         super("用户名已存在", null);
-        logError();
     }
 }

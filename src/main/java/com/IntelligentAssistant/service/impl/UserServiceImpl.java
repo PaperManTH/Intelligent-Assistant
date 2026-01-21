@@ -5,6 +5,9 @@ import com.IntelligentAssistant.domain.UserContext;
 import com.IntelligentAssistant.domain.dto.LoginRequest;
 import com.IntelligentAssistant.domain.dto.RegisterRequest;
 import com.IntelligentAssistant.domain.entity.IaUser;
+import com.IntelligentAssistant.exception.captcha.CaptchaCreateException;
+import com.IntelligentAssistant.exception.captcha.CaptchaErrorException;
+import com.IntelligentAssistant.exception.captcha.CaptchaExpireException;
 import com.IntelligentAssistant.exception.user.*;
 import com.IntelligentAssistant.mapper.IaUserMapper;
 import com.IntelligentAssistant.security.domain.LoginUser;
@@ -75,7 +78,7 @@ public class UserServiceImpl extends ServiceImpl<IaUserMapper, IaUser> implement
         String username = loginRequest.getUserName();
         String password = loginRequest.getPassword();
         // 1. 参数校验
-        //validateCode(loginRequest.getCode(), loginRequest.getUuid());
+        validateCode(loginRequest.getCode(), loginRequest.getUuid());
         validatePassword(username, password);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
@@ -101,7 +104,7 @@ public class UserServiceImpl extends ServiceImpl<IaUserMapper, IaUser> implement
         String username = registerRequest.getUserName();
         String password = registerRequest.getPassword();
         // 1. 参数校验
-        //validateCode(registerRequest.getCode(), registerRequest.getUuid());
+        validateCode(registerRequest.getCode(), registerRequest.getUuid());
         validateRegisterPassword(username, password);
         if (userExists(username)) {
             throw new UserAlreadyExistsException();
@@ -191,7 +194,7 @@ public class UserServiceImpl extends ServiceImpl<IaUserMapper, IaUser> implement
         }
         redisCache.delete(verifyKey);
         if (!code.equalsIgnoreCase(cacheCode)) {
-            throw new CaptchaException();
+            throw new CaptchaErrorException();
         }
     }
 

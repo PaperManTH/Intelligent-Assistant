@@ -15,6 +15,5 @@ public class UserInfoNotNullException extends UserException {
     private static final long serialVersionUID = 1L;
     public UserInfoNotNullException() {
         super("用户名或密码不为空", null);
-        logError();
     }
 }

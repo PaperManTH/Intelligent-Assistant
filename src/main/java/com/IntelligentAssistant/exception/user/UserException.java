@@ -18,6 +18,5 @@ public class UserException extends BaseException {
 
     public UserException(String message, Object[] args) {
         super("user", message, args, null);
-        logError();
     }
 }

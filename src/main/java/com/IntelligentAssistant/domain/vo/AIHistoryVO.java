@@ -3,8 +3,6 @@ package com.IntelligentAssistant.domain.vo;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-
 /**
  * @Author thpaperman
  * @Description AI历史记录VO

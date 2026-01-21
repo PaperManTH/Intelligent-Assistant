@@ -1,4 +1,6 @@
-package com.IntelligentAssistant.exception.user;
+package com.IntelligentAssistant.exception.captcha;
+
+import com.IntelligentAssistant.exception.user.UserException;
 
 import java.io.Serial;
 
@@ -16,6 +18,5 @@ public class CaptchaExpireException extends UserException {
 
     public CaptchaExpireException() {
         super("验证码已失效", null);
-        logError();
     }
 }

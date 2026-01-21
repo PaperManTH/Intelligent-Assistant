@@ -1,16 +1,12 @@
 package com.IntelligentAssistant.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.Instant;
-import java.util.UUID;
 
 /**
  * @Author thpaperman

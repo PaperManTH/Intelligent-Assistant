@@ -5,7 +5,6 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.tomcat.util.http.parser.Authorization;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;

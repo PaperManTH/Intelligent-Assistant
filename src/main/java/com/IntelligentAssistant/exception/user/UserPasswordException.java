@@ -16,6 +16,5 @@ public class UserPasswordException extends UserException {
 
     public UserPasswordException() {
         super("用户名密码不匹配", null);
-        logError();
     }
 }

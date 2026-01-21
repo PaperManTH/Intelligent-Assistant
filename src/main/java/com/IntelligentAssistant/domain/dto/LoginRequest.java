@@ -2,8 +2,6 @@ package com.IntelligentAssistant.domain.dto;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * @Author thpaperman
  * @Description 登录请求参数
