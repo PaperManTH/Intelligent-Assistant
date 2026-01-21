@@ -18,13 +18,10 @@ spring:
           enabled: true
   ai:
     dashscope:
-      api-key: sk-a514564db277446fa9c551918a0c46aa
-#      api-key: ${ALIBABA_TONGYI_APIKEY}
+      api-key: ${ALIBABA_TONGYI_APIKEY}
       memory-length: 10
 
 gaode:
-  api-key: c55e5d1183fdf1f66f4900e01bd26d3e
-#  api-key: ${GAODE_TIANQI_APIKEY}
+  api-key: ${GAODE_TIANQI_APIKEY}
 baidu:
-  api-key: bce-v3/ALTAK-zVzCYI5NPZNaILHWXSbYF/f668dc926021ff361731cf8c3ee24a4516938d44
-#  api-key: ${BAIDU_QIANFAN_APIKEY}
+  api-key: ${BAIDU_QIANFAN_APIKEY}
